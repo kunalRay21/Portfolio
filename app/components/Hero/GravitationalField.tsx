@@ -33,7 +33,7 @@ const fragmentShader = `
     float voidFall = smoothstep(0.85, 0.55, dist);
 
     vec3 whiteCore = vec3(1.0);
-    vec3 greenEnergy = vec3(0.95, 0.95, 0.95);
+    vec3 greenEnergy = vec3(1.0);
     vec3 voidColor = vec3(0.02, 0.03, 0.03);
 
     vec3 color = mix(voidColor, greenEnergy, ring);

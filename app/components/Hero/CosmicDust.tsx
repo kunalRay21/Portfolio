@@ -56,7 +56,7 @@ export default function CosmicDust() {
 
       <pointsMaterial
         size={0.015}
-        color="#9ddcc8"
+        color="#ffffff"
         transparent
         opacity={0.18}
         depthWrite={false}

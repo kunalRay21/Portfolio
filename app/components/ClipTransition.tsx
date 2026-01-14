@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function ClipTransition() {
   const [active, setActive] = useState(false);
@@ -33,26 +34,15 @@ export default function ClipTransition() {
 
   return (
     <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden">
-      <style jsx>{`
-        .strip {
-          animation: slideAndExit 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        @keyframes slideAndExit {
-          0% {
-            transform: translateY(0);
-          }
-          100% {
-            transform: translateY(-100%);
-          }
-        }
-      `}</style>
-
-      <div className={`absolute inset-0 flex flex-row ${exit ? "exit" : ""}`}>
-        <div
-          className="strip flex-1 h-full bg-[#050807]"
-          style={{
-            animationDelay: `0s`,
+      <div className="absolute inset-0 flex flex-row">
+        <motion.div
+          className="flex-1 h-full bg-[#050807]"
+          initial={{ y: 0 }}
+          animate={{ y: "-100%" }}
+          transition={{
+            duration: 2.4,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0,
           }}
         />
       </div>

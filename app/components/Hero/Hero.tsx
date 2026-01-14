@@ -1,7 +1,7 @@
 "use client";
 
 import CosmicBackground from "../CosmicBackground";
-
+import Sidebar from "./Sidebar";
 export default function Hero() {
   return (
     <section className="relative min-h-screen w-full overflow-hidden">
@@ -21,6 +21,7 @@ export default function Hero() {
           <span className="block pt-4 text-lg text-white/70">— Kunal</span>
         </div>
       </div>
+
     </section>
   );
 }
