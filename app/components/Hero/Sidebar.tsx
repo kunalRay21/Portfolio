@@ -22,7 +22,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
   return (
     <>
       <motion.div
-        className="fixed top-0 right-0 h-screen bg-[#050807] border-l border-white/10 z-40 overflow-y-auto opacity-70 w-4/5 md:w-3/10"
+        className="fixed top-0 right-0 h-screen bg-[#050807] border-l border-white/10 z-40 overflow-y-auto opacity-70~ w-4/5 md:w-3/10"
         initial={{ x: "100%", borderRadius: "50%" }}
         animate={{
           x: isOpen ? "0%" : "100%",
