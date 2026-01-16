@@ -2,12 +2,19 @@
 
 import Sidebar from "../Navbar/Sidebar";
 import Hamburger from "../Navbar/Hamburger";
+// import Identity from "../Identity/index";
+
 export default function Hero() {
   return (
     <section
-      className="relative w-full overflow-hidden "
+      className="relative w-full overflow-hidden"
       style={{ height: "100vh" }}
     >
+      {/* Identity - Abstract Presence */}
+      <div className="absolute inset-0 z-0">
+        {/* <Identity /> */}
+      </div>
+
       {/* Text Plane */}
       <div className="relative z-10 flex min-h-screen items-center pl-[8vw]">
         <div className="max-w-xl space-y-6">

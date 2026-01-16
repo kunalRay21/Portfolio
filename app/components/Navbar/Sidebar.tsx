@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
+import { SIDEBAR_LINKS } from "@/app/constants/sidebarLinks";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,14 +12,6 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
-
-  const linkItems = [
-    { href: "https://linkedin.com", label: "Linkedin", color: "#345995" },
-    { href: "https://github.com", label: "About", color: "#029B00" },
-    { href: "mailto:contact@example.com", label: "Contact", color: "#ED9121" },
-    { href: "https://github.com", label: "Github", color: "#57ADEC" },
-    { href: "https://blog.example.com", label: "Blog", color: "#CBDF92" },
-  ];
 
   return (
     <>
@@ -34,11 +27,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Sidebar */}
       <motion.div
-        className="fixed top-0 right-0 h-screen bg-[#050807] border-l border-white/10 z-40 overflow-y-auto opacity-100 w-4/5 md:w-3/10"
-        initial={{ x: "100%", borderRadius: "50%" }}
+        className="fixed top-0 right-0 h-screen bg-[#050807] border-l border-white/10 z-40 overflow-y-auto w-4/5 md:w-3/10"
+        initial={{ x: "100%", borderRadius: "50%", opacity: 0 }}
         animate={{
           x: isOpen ? "0%" : "100%",
           borderRadius: isOpen ? "0%" : "50%",
+          opacity: isOpen ? 1 : 0,
         }}
         transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
       >
@@ -60,46 +54,91 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           />
         </motion.button>
 
-        <div className="flex w-full min-h-screen items-center">
-          <nav className="space-y-8 w-full text-center flex items-start px-20 flex-col pt-20">
-            {linkItems.map((item, index) => (
-              <motion.div
+        <div className="flex w-full h-screen flex-col justify-between items-start p-8">
+          {/* Spacing for close button */}
+          <div className="h-16" />
+
+          {/* Navigation Links */}
+          <nav className="w-full flex flex-col gap-4 relative">
+            {SIDEBAR_LINKS.map((item, index) => (
+              <motion.a
                 key={index}
-                className="flex items-center gap-3 w-full"
+                href={item.href}
+                target={item.href.startsWith("mailto") ? undefined : "_blank"}
+                rel={
+                  item.href.startsWith("mailto")
+                    ? undefined
+                    : "noopener noreferrer"
+                }
+                className="relative block px-6 py-3 rounded-lg transition-colors"
                 onMouseEnter={() => setHoveredItem(index)}
                 onMouseLeave={() => setHoveredItem(null)}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  delay: index * 0.05,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 25,
+                }}
               >
-                <motion.a
-                  href={item.href}
-                  target={item.href.startsWith("mailto") ? undefined : "_blank"}
-                  rel={
-                    item.href.startsWith("mailto")
-                      ? undefined
-                      : "noopener noreferrer"
-                  }
-                >
-                  {hoveredItem === index ? (
-                    <ExternalLink className="w-5 h-5 text-white" />
-                  ) : (
-                    <motion.span
-                      className="w-5 h-5 cursor-pointer flex-shrink-0 relative rounded-full flex items-center justify-center"
-                      animate={{ scale: hoveredItem === index ? 1.05 : 1 }}
-                      transition={{ type: "spring", stiffness: 200 }}
-                      style={{ backgroundColor: item.color }}
-                    ></motion.span>
-                  )}
-                </motion.a>
-                <a
-                  href="#"
-                  className="block text-white hover:text-white/60 transition-colors"
-                >
-                  {item.label}
-                </a>
-              </motion.div>
+                {hoveredItem === index && (
+                  <motion.div
+                    layoutId="sidebar-hover"
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  />
+                )}
+
+                {/* Link Container */}
+                <div className="relative flex items-center gap-3 text-gray-300 z-10">
+                  <motion.div
+                    animate={{
+                      scale: hoveredItem === index ? 1.1 : 1,
+                      rotate: hoveredItem === index ? [0, -5, 5, 0] : 0,
+                      x: hoveredItem === index ? 2 : 0,
+                    }}
+                    transition={{
+                      scale: { type: "spring", stiffness: 400, damping: 20 },
+                      rotate: { duration: 0.4, ease: "easeInOut" },
+                      x: { type: "spring", stiffness: 300, damping: 25 },
+                    }}
+                  >
+                    {hoveredItem === index ? (
+                      <ExternalLink className="w-5 h-5 text-blue-400" />
+                    ) : (
+                      <item.icon
+                        className="w-5 h-5"
+                        style={{ color: item.color }}
+                      />
+                    )}
+                  </motion.div>
+                  <motion.span
+                    animate={{
+                      x: hoveredItem === index ? 4 : 0,
+                      color:
+                        hoveredItem === index
+                          ? "rgb(147, 197, 253)"
+                          : "rgb(209, 213, 219)",
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 25,
+                    }}
+                  >
+                    {item.label}
+                  </motion.span>
+                </div>
+              </motion.a>
             ))}
           </nav>
+
+          {/* Footer Space */}
+          <div className="h-20" />
         </div>
       </motion.div>
     </>
