@@ -6,9 +6,10 @@ import { useState } from "react";
 
 interface SidebarProps {
   isOpen: boolean;
+  onClose?: () => void;
 }
 
-export default function Sidebar({ isOpen }: SidebarProps) {
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
   const linkItems = [
@@ -21,8 +22,19 @@ export default function Sidebar({ isOpen }: SidebarProps) {
 
   return (
     <>
+      {/* Backdrop Overlay */}
       <motion.div
-        className="fixed top-0 right-0 h-screen bg-[#050807] border-l border-white/10 z-40 overflow-y-auto opacity-70~ w-4/5 md:w-3/10"
+        className="fixed inset-0 bg-black/50 z-30"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        style={{ pointerEvents: isOpen ? "auto" : "none" }}
+        onClick={onClose}
+      />
+
+      {/* Sidebar */}
+      <motion.div
+        className="fixed top-0 right-0 h-screen bg-[#050807] border-l border-white/10 z-40 overflow-y-auto opacity-100 w-4/5 md:w-3/10"
         initial={{ x: "100%", borderRadius: "50%" }}
         animate={{
           x: isOpen ? "0%" : "100%",
@@ -30,8 +42,26 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         }}
         transition={{ duration: 0.8, ease: [0.77, 0, 0.175, 1] }}
       >
-        <div className="flex w-full h-7/10 items-center">
-          <nav className="space-y-8 w-full text-center flex items-start px-20 flex-col">
+        {/* Close Button */}
+        <motion.button
+          className={`fixed top-8 right-8 flex flex-col justify-center gap-2 cursor-pointer p-2 rounded z-50`}
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          <motion.div
+            className="w-6 h-0.5 bg-white"
+            animate={isOpen ? { rotate: 45, y: 3 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.div
+            className="w-6 h-0.5 bg-white"
+            animate={isOpen ? { rotate: -45, y: -12 } : { rotate: 0, y: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.button>
+
+        <div className="flex w-full min-h-screen items-center">
+          <nav className="space-y-8 w-full text-center flex items-start px-20 flex-col pt-20">
             {linkItems.map((item, index) => (
               <motion.div
                 key={index}
@@ -52,11 +82,14 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                 >
                   {hoveredItem === index ? (
                     <ExternalLink className="w-5 h-5 text-white" />
-                  ) : <motion.span
-                  className="w-5 h-5 cursor-pointer flex-shrink-0 relative rounded-full flex items-center justify-center"
-                  animate={{ scale: hoveredItem === index ? 1.05 : 1 }}
-                  transition={{ type: "spring", stiffness: 200 }}
-                  style={{ backgroundColor: item.color }}></motion.span>}
+                  ) : (
+                    <motion.span
+                      className="w-5 h-5 cursor-pointer flex-shrink-0 relative rounded-full flex items-center justify-center"
+                      animate={{ scale: hoveredItem === index ? 1.05 : 1 }}
+                      transition={{ type: "spring", stiffness: 200 }}
+                      style={{ backgroundColor: item.color }}
+                    ></motion.span>
+                  )}
                 </motion.a>
                 <a
                   href="#"

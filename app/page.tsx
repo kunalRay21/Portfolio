@@ -3,8 +3,10 @@
 
 import { useState, useEffect } from "react";
 import Hero from "./components/Hero/Hero";
+import ProjectsSection from "./components/ProjectsSection";
+import ScrollIndicator from "./components/ScrollIndicator";
 import Loader from "./components/Loader";
-import ClipTransition from "./components/ClipTransition";
+import ClipTransition from "./components/Transitions/ClipTransition";
 
 export default function Home() {
   const [showHero, setShowHero] = useState(false);
@@ -14,7 +16,7 @@ export default function Home() {
     // Render Hero (but invisible) when ClipTransition starts
     const start = setTimeout(() => {
       setShowHero(true);
-    },1500);
+    }, 1500);
 
     // Make Hero visible when curtain animation completes
     const reveal = setTimeout(() => {
@@ -31,6 +33,7 @@ export default function Home() {
     <main>
       <Loader />
       <ClipTransition />
+      <ScrollIndicator isVisible={heroVisible} />
       {showHero && (
         <div
           style={{
@@ -39,6 +42,7 @@ export default function Home() {
           }}
         >
           <Hero />
+          <ProjectsSection />
         </div>
       )}
     </main>

@@ -2,23 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Sidebar from "./Hero/Sidebar";
+import Sidebar from "./Sidebar";
 
 export default function Hamburger() {
   const [isOpen, setIsOpen] = useState(false);
+
   const handleClick = () => {
-    console.log("current OPEN STATE", isOpen);
     setIsOpen((prev) => !prev);
-    console.log("OPEN STATE AFTER CLICK", isOpen);
   };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <motion.button
-        className={`fixed top-8 right-8 z-50 flex flex-col justify-center gap-2 cursor-pointer p-2`}
+        className={`flex flex-col justify-center gap-2 cursor-pointer p-2 rounded z-50`}
         onClick={handleClick}
         aria-label="Toggle menu"
-        onHoverStart={() => {}}
-        onHoverEnd={() => {}}
+        animate={{ opacity: isOpen ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
+        style={{ pointerEvents: isOpen ? "none" : "auto" }}
       >
         <motion.div
           className="w-6 h-0.5 bg-white"
@@ -31,7 +36,7 @@ export default function Hamburger() {
           transition={{ duration: 0.3 }}
         />
       </motion.button>
-      <Sidebar isOpen={isOpen} />
+      <Sidebar isOpen={isOpen} onClose={handleClose} />
     </>
   );
 }

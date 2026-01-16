@@ -1,12 +1,13 @@
 "use client";
 
-import CosmicBackground from "../CosmicBackground";
-import Sidebar from "./Sidebar";
+import Sidebar from "../Navbar/Sidebar";
+import Hamburger from "../Navbar/Hamburger";
 export default function Hero() {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden">
-      <CosmicBackground />
-
+    <section
+      className="relative w-full overflow-hidden "
+      style={{ height: "100vh" }}
+    >
       {/* Text Plane */}
       <div className="relative z-10 flex min-h-screen items-center pl-[8vw]">
         <div className="max-w-xl space-y-6">
@@ -21,7 +22,6 @@ export default function Hero() {
           <span className="block pt-4 text-lg text-white/70">— Kunal</span>
         </div>
       </div>
-
     </section>
   );
 }
