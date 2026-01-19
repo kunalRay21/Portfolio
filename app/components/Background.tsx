@@ -1,5 +1,3 @@
-"use client";
-
 import Particles from "../../components/Particles";
 
 interface BackgroundProps {
@@ -22,7 +20,7 @@ export default function Background({
       className={`fixed inset-0 pointer-events-none z-0 w-screen h-screen ${bgColors[variant]}`}
     >
       <Particles
-        particleCount={2000}
+        particleCount={4000}
         particleSpread={22}
         speed={0.04}
         particleColors={["#ffffff"]}
