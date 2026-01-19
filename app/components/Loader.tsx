@@ -36,7 +36,7 @@ export default function Loader() {
             strokeDasharray={1000}
             initial={{ strokeDashoffset: 1000 }}
             animate={{ strokeDashoffset: 0 }}
-            transition={{ duration: 6, ease: "easeInOut" }}
+            transition={{ duration: 5.5, ease: "easeInOut" }}
           />
         </g>
       </motion.svg>
