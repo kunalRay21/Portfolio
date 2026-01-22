@@ -3,6 +3,7 @@
 import { motion, easeOut } from "framer-motion";
 import { signatureFont } from "@/app/fonts";
 import CanvasBackgroundOverlay from "./CanvasBackgroundOverlay";
+import Particles from "@/components/Particles";
 
 export default function Hero() {
   const containerVariants = {
@@ -31,6 +32,26 @@ export default function Hero() {
         imageSrc="/BackgroundOverlay.png"
         opacity={0.6}
       />
+
+      {/* Particles Background */}
+      <div className="absolute inset-0 pointer-events-none z-[5]">
+        <Particles
+          className=""
+          particleCount={2000}
+          particleSpread={40}
+          speed={0.04}
+          particleColors={["#ffffff", "#e5e5e5", "#f5f5f5"]}
+          alphaParticles={true}
+          particleBaseSize={120}
+          sizeRandomness={1}
+          cameraDistance={10}
+          pixelRatio={
+            typeof window !== "undefined"
+              ? Math.min(window.devicePixelRatio, 2)
+              : 1
+          }
+        />
+      </div>
 
       <motion.div
         className="relative z-10 flex min-h-screen items-center justify-center px-6 md:px-10 lg:px-16"
