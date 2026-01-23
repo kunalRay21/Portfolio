@@ -27,9 +27,36 @@ export default function Carousel3D({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const baseVelocity = -30; // Base scrolling speed (negative = left to right)
   const x = useMotionValue(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Triple the projects for seamless infinite scroll
   const extendedProjects = [...projects, ...projects, ...projects];
+
+  // Helper function to calculate scale based on distance from center
+  const calculateScale = (cardIndex: number) => {
+    if (!containerRef.current) return 1;
+
+    const cardWidth = 350 + 32; // 350px width + 32px gap
+    const containerWidth = containerRef.current.offsetWidth;
+    const centerOfViewport = containerWidth / 2;
+
+    // Calculate card's center position relative to viewport
+    const cardPosition = x.get() + cardIndex * cardWidth + 350 / 2;
+    const distanceFromCenter = Math.abs(centerOfViewport - cardPosition);
+
+    // Normalize distance (0 = at center, 1 = at edge of viewport)
+    const normalizedDistance = Math.min(
+      distanceFromCenter / (containerWidth / 2),
+      1,
+    );
+
+    // Scale from 1.2 (at center) to 0.7 (at edges) with smooth curve
+    const minScale = 0.7;
+    const maxScale = 1.2;
+    const scale = maxScale - normalizedDistance * (maxScale - minScale);
+
+    return scale;
+  };
 
   useAnimationFrame((t, delta) => {
     if (!isPaused) {
@@ -57,7 +84,7 @@ export default function Carousel3D({
   });
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div ref={containerRef} className="relative h-full w-full overflow-hidden">
       {/* Left vignette mask */}
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/50 to-transparent z-10 pointer-events-none" />
 
@@ -75,6 +102,32 @@ export default function Carousel3D({
         {extendedProjects.map((project, index) => {
           const isHovered = hoveredIndex === index;
 
+          // Use motion values for smooth scaling based on position
+          const cardWidth = 350 + 32;
+          const scale = useTransform(x, (latest) => {
+            if (!containerRef.current) return 1;
+
+            const containerWidth = containerRef.current.offsetWidth;
+            const centerOfViewport = containerWidth / 2;
+
+            // Calculate card's center position relative to viewport
+            const cardPosition = latest + index * cardWidth + 350 / 2;
+            const distanceFromCenter = Math.abs(
+              centerOfViewport - cardPosition,
+            );
+
+            // Normalize distance (0 = at center, 1 = at edge of viewport)
+            const normalizedDistance = Math.min(
+              distanceFromCenter / (containerWidth / 2),
+              1,
+            );
+
+            // Scale from 1.2 (at center) to 0.75 (at edges)
+            const minScale = 0.75;
+            const maxScale = 1.2;
+            return maxScale - normalizedDistance * (maxScale - minScale);
+          });
+
           return (
             <motion.div
               key={`${project.id}-${index}`}
@@ -83,10 +136,10 @@ export default function Carousel3D({
                 width: "350px",
                 height: "450px",
                 transformStyle: "preserve-3d",
+                scale: isHovered ? 1.15 : scale, // Use dynamic scale when not hovered
               }}
               animate={{
                 rotateY: isHovered ? 0 : -15, // Flatten on hover
-                scale: isHovered ? 1.15 : 1,
                 z: isHovered ? 100 : 0,
               }}
               transition={{

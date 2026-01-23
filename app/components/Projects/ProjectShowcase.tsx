@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Github, ArrowRight } from "lucide-react";
+import { Github, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Project } from "./types";
 import Particles from "@/components/Particles";
 
@@ -31,6 +31,34 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const [isLocked, setIsLocked] = useState(false);
   const [maxScroll, setMaxScroll] = useState(0);
   const [hasBeenViewed, setHasBeenViewed] = useState(false);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+  // Navigate to a specific card
+  const navigateToCard = (index: number) => {
+    if (!carouselRef.current) return;
+
+    const firstCard = carouselRef.current.querySelector(
+      ".project-card",
+    ) as HTMLElement;
+    const cardWidth = firstCard?.offsetWidth || 0;
+    const gap = 64; // md:gap-16 = 64px
+
+    const targetScroll = index * (cardWidth + gap);
+    setScrollProgress(Math.min(targetScroll, maxScroll));
+    setCurrentCardIndex(index);
+  };
+
+  // Navigate to previous card
+  const handlePrevCard = () => {
+    const newIndex = Math.max(0, currentCardIndex - 1);
+    navigateToCard(newIndex);
+  };
+
+  // Navigate to next card
+  const handleNextCard = () => {
+    const newIndex = Math.min(projects.length - 1, currentCardIndex + 1);
+    navigateToCard(newIndex);
+  };
 
   // Calculate maximum scroll distance
   useEffect(() => {
@@ -59,6 +87,24 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     window.addEventListener("resize", updateMaxScroll);
     return () => window.removeEventListener("resize", updateMaxScroll);
   }, [projects]);
+
+  // Update current card index based on scroll progress
+  useEffect(() => {
+    if (!carouselRef.current) return;
+
+    const firstCard = carouselRef.current.querySelector(
+      ".project-card",
+    ) as HTMLElement;
+    const cardWidth = firstCard?.offsetWidth || 0;
+    const gap = 64; // md:gap-16 = 64px
+
+    if (cardWidth > 0) {
+      const calculatedIndex = Math.round(scrollProgress / (cardWidth + gap));
+      setCurrentCardIndex(
+        Math.max(0, Math.min(projects.length - 1, calculatedIndex)),
+      );
+    }
+  }, [scrollProgress, projects.length]);
 
   // Intersection Observer to detect when section is in view
   useEffect(() => {
@@ -116,7 +162,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   return (
     <div
       ref={sectionRef}
-      className="relative bg-neutral-950 h-screen overflow-hidden"
+      className="relative bg-gradient-to-b from-black to-transparent h-screen overflow-hidden"
       style={{
         position: isLocked ? "fixed" : "relative",
         top: isLocked ? 0 : "auto",
@@ -207,6 +253,47 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </motion.div>
+
+          {/* Navigation Controls - Only visible when not locked */}
+          {!isLocked && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute bottom-8 right-8 flex items-center gap-4 z-30"
+            >
+              {/* Previous Button */}
+              <motion.button
+                onClick={handlePrevCard}
+                disabled={currentCardIndex === 0}
+                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.button>
+
+              {/* Card Counter */}
+              <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                <span className="text-sm font-medium text-white">
+                  {currentCardIndex + 1} / {projects.length}
+                </span>
+              </div>
+
+              {/* Next Button */}
+              <motion.button
+                onClick={handleNextCard}
+                disabled={currentCardIndex === projects.length - 1}
+                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

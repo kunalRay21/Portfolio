@@ -27,7 +27,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden">
+    <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-transparent to-black">
       <CanvasBackgroundOverlay
         imageSrc="/BackgroundOverlay.png"
         opacity={0.6}
