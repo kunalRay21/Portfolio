@@ -26,7 +26,10 @@ import { aboutData } from "./aboutData";
 
 export default function AboutSection() {
   return (
-    <section className="relative w-full bg-linear-to-b from-black via-black to-transparent overflow-hidden">
+    <section
+      id="about"
+      className="relative w-full bg-linear-to-b from-black via-black to-transparent overflow-hidden"
+    >
       {/* Particles Background */}
       <div className="absolute inset-0 pointer-events-none z-5 opacity-40">
         <Particles
@@ -65,35 +68,6 @@ export default function AboutSection() {
             transition={{ duration: 1, ease: "easeOut" }}
             style={{ perspective: "1000px" }}
           >
-            {/* Badge with magnetic effect */}
-            <motion.div
-              className="flex justify-center mb-6"
-              initial={{ opacity: 0, scale: 0.5, rotateZ: -10 }}
-              whileInView={{ opacity: 1, scale: 1, rotateZ: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 15,
-                delay: 0.1,
-              }}
-              whileHover={{ scale: 1.1, rotateZ: 5 }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 backdrop-blur-sm">
-                <motion.span
-                  className="text-sm font-medium text-emerald-300"
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  About Me
-                </motion.span>
-              </div>
-            </motion.div>
-
             {/* Main Headline with split animation */}
             <motion.h1
               className="text-center text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-[1.1] text-white tracking-tight mb-4"
@@ -113,8 +87,9 @@ export default function AboutSection() {
                   stiffness: 100,
                 }}
               >
-                {aboutData.headline.split(" ")[0]}{" "}
+                {aboutData.headlinePrefix}
               </motion.span>
+              {"  "}
               <motion.span
                 className="inline-block text-emerald-500"
                 initial={{ opacity: 0, x: 50, rotateY: 90 }}
@@ -127,8 +102,22 @@ export default function AboutSection() {
                   stiffness: 100,
                 }}
               >
-                {aboutData.headline.split(" ").slice(1).join(" ")}
-              </motion.span>
+                {aboutData.headlineCenter}
+              </motion.span>{" "}
+              <motion.span
+                className={`inline-block text-[#C9C5B1] ${signatureFont.className}`}
+                initial={{ opacity: 0, x: -50, rotateY: -90 }}
+                whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.2,
+                  type: "spring",
+                  stiffness: 100,
+                }}
+              >
+                {aboutData.headlineHighlight}
+              </motion.span>{" "}
             </motion.h1>
 
             {/* Tagline with typewriter effect */}

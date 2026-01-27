@@ -9,16 +9,18 @@ import { AboutData } from "./types";
  */
 
 export const aboutData: AboutData = {
-  headline: "Crafting Digital Experiences",
-  tagline: "Full-Stack Developer & Designer",
+  headlinePrefix: "Engineering",
+  headlineCenter: "Scalable",
+  headlineHighlight: "Solutions",
+  tagline: "Computer Science Engineer & Full-Stack Developer",
   description:
-    "I'm a passionate developer who transforms complex problems into elegant, user-centric solutions. With a keen eye for design and a deep understanding of modern web technologies, I bridge the gap between creativity and functionality.",
+    "I am a Computer Science Engineer dedicated to growing my technical expertise by building practical, real-world applications. My focus is on mastering Data Structures & Algorithms while developing robust web solutions that bridge complex backend logic with responsive, user-centric frontends.",
 
   stats: [
-    { label: "Years Experience", value: "5+" },
-    { label: "Projects Completed", value: "50+" },
-    { label: "Happy Clients", value: "30+" },
-    { label: "Code Commits", value: "10k+" },
+    { label: "Years Experience", value: "2+" },
+    { label: "Projects Built", value: "12+" },
+    { label: "Tech Stack", value: "MERN/PERN" },
+    { label: "Commits", value: "1k+" },
   ],
 
   skills: [
@@ -42,30 +44,30 @@ export const aboutData: AboutData = {
       proficiency: 95,
     },
     {
-      id: "framer",
-      name: "Framer Motion",
+      id: "react-native",
+      name: "React Native",
       category: "frontend",
-      proficiency: 85,
+      proficiency: 80,
     },
 
     // Backend
     {
-      id: "nodejs",
-      name: "Node.js",
+      id: "python",
+      name: "Python (Django/Flask)",
       category: "backend",
-      proficiency: 88,
+      proficiency: 85,
     },
     {
-      id: "python",
-      name: "Python",
+      id: "java",
+      name: "Java",
       category: "backend",
-      proficiency: 82,
+      proficiency: 80,
     },
     {
       id: "databases",
-      name: "SQL & NoSQL",
+      name: "PostgreSQL & Supabase",
       category: "backend",
-      proficiency: 85,
+      proficiency: 88,
     },
 
     // Tools & Design
@@ -76,58 +78,58 @@ export const aboutData: AboutData = {
       proficiency: 90,
     },
     {
-      id: "figma",
-      name: "Figma",
-      category: "design",
-      proficiency: 88,
+      id: "odoo",
+      name: "Odoo ERP",
+      category: "tools",
+      proficiency: 75,
     },
     {
       id: "docker",
       name: "Docker",
       category: "tools",
-      proficiency: 75,
+      proficiency: 70,
     },
   ],
 
   experience: [
     {
       id: "exp1",
-      role: "Senior Frontend Developer",
-      company: "Tech Innovations Inc.",
-      duration: "2022 - Present",
+      role: "Lead Full-Stack Developer",
+      company: "Parts Big Boss (Project)",
+      duration: "Jan 2026 - Present",
       description:
-        "Leading frontend development initiatives, architecting scalable React applications, and mentoring junior developers.",
-      technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+        "Developing a comprehensive e-commerce platform using the PERN stack. Replicating Magento functionalities and integrating Odoo for backend operations and inventory management.",
+      technologies: ["React", "Node.js", "PostgreSQL", "Odoo"],
       current: true,
     },
     {
       id: "exp2",
-      role: "Full-Stack Developer",
-      company: "Digital Solutions Co.",
-      duration: "2020 - 2022",
+      role: "Hackathon Developer",
+      company: "Smart India Hackathon",
+      duration: "Sep 2025",
       description:
-        "Developed and maintained full-stack web applications, implemented RESTful APIs, and optimized database performance.",
-      technologies: ["Node.js", "React", "MongoDB", "Express"],
+        "Designed and built a healthcare application for migrants in Kerala. Implemented a Python/Django backend with a React & Tailwind CSS frontend to solve language barrier issues in medical access.",
+      technologies: ["React", "Python", "Django", "Tailwind CSS"],
     },
     {
       id: "exp3",
-      role: "Frontend Developer",
-      company: "Creative Agency",
-      duration: "2019 - 2020",
+      role: "Web Developer",
+      company: "Personal Projects",
+      duration: "2024 - 2025",
       description:
-        "Created responsive websites and interactive user interfaces for diverse clients across various industries.",
-      technologies: ["JavaScript", "Vue.js", "SASS", "Webpack"],
+        "Built various applications including 'CircuitCart' (e-commerce) and a movie app. Focused on mastering state management, API integration, and responsive UI design.",
+      technologies: ["JavaScript", "React.js", "Supabase", "CSS"],
     },
   ],
 
   education: [
     {
       id: "edu1",
-      degree: "Bachelor of Science in Computer Science",
-      institution: "University of Technology",
-      year: "2019",
+      degree: "Bachelor of Technology in Computer Science",
+      institution: "Noida Institute of Engineering and Technology", // Replace with your actual University name
+      year: "2028 (Expected)",
       description:
-        "Graduated with honors, specializing in Web Development and User Experience Design.",
+        "Focusing on Data Structures & Algorithms, Web Development, and Software Engineering principles.",
     },
   ],
 };

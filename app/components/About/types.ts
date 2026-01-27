@@ -30,7 +30,9 @@ export interface Education {
 }
 
 export interface AboutData {
-  headline: string;
+  headlinePrefix: string;
+  headlineCenter:string;
+  headlineHighlight: string;
   description: string;
   tagline: string;
   skills: Skill[];
