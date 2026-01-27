@@ -9,7 +9,7 @@ export default function Loader() {
   useEffect(() => {
     const hide = setTimeout(() => {
       setVisible(false);
-    }, 1500);
+    }, 2500);
 
     return () => clearTimeout(hide);
   }, []);

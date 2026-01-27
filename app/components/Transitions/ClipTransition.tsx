@@ -10,10 +10,10 @@ export default function ClipTransition({ onComplete }: ClipTransitionProps) {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    // Start when loader disappears (1500ms)
+    // Start when loader disappears (2500ms)
     const start = setTimeout(() => {
       setActive(true);
-    }, 1000);
+    }, 2000);
 
     // Hide component after exit animation completes and call callback
     // Total duration: animation (1.8s) + delay (0.3s) + shimmer (1.5s) = ~3.6s

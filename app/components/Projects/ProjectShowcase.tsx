@@ -31,6 +31,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const [isLocked, setIsLocked] = useState(false);
   const [maxScroll, setMaxScroll] = useState(0);
   const [hasBeenViewed, setHasBeenViewed] = useState(false);
+  const [hasEnteredFromTop, setHasEnteredFromTop] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
   // Navigate to a specific card
@@ -111,15 +112,24 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     const section = sectionRef.current;
     if (!section) return;
 
+    let previousY = 0;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Only lock on first visit
+        const currentY = entry.boundingClientRect.y;
+        const scrollingDown = currentY < previousY;
+        previousY = currentY;
+
+        // Only lock on first visit when scrolling down from top
         if (
           entry.isIntersecting &&
           entry.intersectionRatio >= 0.99 &&
-          !hasBeenViewed
+          !hasBeenViewed &&
+          scrollingDown &&
+          !hasEnteredFromTop
         ) {
           setIsLocked(true);
+          setHasEnteredFromTop(true);
         } else if (!entry.isIntersecting) {
           // Reset when section is out of view
           if (scrollProgress >= maxScroll) {
@@ -132,7 +142,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [scrollProgress, maxScroll, hasBeenViewed]);
+  }, [scrollProgress, maxScroll, hasBeenViewed, hasEnteredFromTop]);
 
   // Handle scroll events when locked
   useEffect(() => {
@@ -160,143 +170,143 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   }, [isLocked, maxScroll]);
 
   return (
-    <div
-      ref={sectionRef}
-      className="relative bg-gradient-to-b from-black to-transparent h-screen overflow-hidden"
-      style={{
-        position: isLocked ? "fixed" : "relative",
-        top: isLocked ? 0 : "auto",
-        left: 0,
-        right: 0,
-        zIndex: isLocked ? 50 : "auto",
-      }}
-    >
-      {/* Particles Background */}
-      <div className="absolute inset-0 pointer-events-none z-[5]">
-        <Particles
-          className=""
-          particleCount={2000}
-          particleSpread={40}
-          speed={0.04}
-          particleColors={["#ffffff", "#e5e5e5", "#f5f5f5"]}
-          alphaParticles={true}
-          particleBaseSize={120}
-          sizeRandomness={1}
-          cameraDistance={10}
-          pixelRatio={
-            typeof window !== "undefined"
-              ? Math.min(window.devicePixelRatio, 2)
-              : 1
-          }
-        />
-      </div>
-
-      <div className="flex flex-col md:flex-row h-full min-h-screen relative z-10">
-        {/* Left/Top Static Panel - Fixed Information */}
-        <div className="w-full md:w-[450px] lg:w-[35%] h-full md:h-full flex flex-col justify-center px-8 md:px-16 z-20  border-b md:border-b-0 md:border-r border-white/5 relative shrink-0">
-          {/* Ambient Glow for Side Panel */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(16,185,129,0.05),transparent_50%)] pointer-events-none" />
-
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative z-10"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 backdrop-blur-sm mb-6">
-              <span className="text-sm font-medium text-emerald-300">
-                Selected Works
-              </span>
-            </div>
-            <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-6">
-              Recent
-              <br />
-              <span className="text-emerald-500">Projects</span>
-            </h2>
-            <p className="text-lg text-zinc-400 max-w-sm leading-relaxed mb-8">
-              Scroll to explore a collection of digital experiences designed to
-              impact and inspire.
-            </p>
-
-            {/* Scroll Progress Indicator */}
-            <div className="w-full max-w-xs">
-              <div className="flex justify-between text-xs text-zinc-500 mb-2">
-                <span>Progress</span>
-                <span>{projects.length} Projects</span>
-              </div>
-              <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-emerald-500"
-                  style={{
-                    scaleX: maxScroll > 0 ? scrollProgress / maxScroll : 0,
-                    transformOrigin: "0%",
-                  }}
-                />
-              </div>
-            </div>
-          </motion.div>
+    <>
+      <div
+        ref={sectionRef}
+        className="relative bg-black min-h-screen h-screen overflow-hidden"
+        style={{
+          position: isLocked ? "sticky" : "relative",
+          top: isLocked ? 0 : "auto",
+          zIndex: isLocked ? 50 : "auto",
+        }}
+      >
+        {/* Particles Background */}
+        <div className="absolute inset-0 pointer-events-none z-[5]">
+          <Particles
+            className=""
+            particleCount={2000}
+            particleSpread={40}
+            speed={0.04}
+            particleColors={["#ffffff", "#e5e5e5", "#f5f5f5"]}
+            alphaParticles={true}
+            particleBaseSize={120}
+            sizeRandomness={1}
+            cameraDistance={10}
+            pixelRatio={
+              typeof window !== "undefined"
+                ? Math.min(window.devicePixelRatio, 2)
+                : 1
+            }
+          />
         </div>
 
-        {/* Right/Bottom Scrolling Panel - Project Cards */}
-        <div className="flex-1 h-full flex items-center relative overflow-hidden">
-          {/* Ambient Glow for Main Area */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_50%)] pointer-events-none" />
+        <div className="flex flex-col md:flex-row h-full min-h-screen relative z-10">
+          {/* Left/Top Static Panel - Fixed Information */}
+          <div className="w-full md:w-[450px] lg:w-[35%] h-full md:h-full flex flex-col justify-center px-8 md:px-16 z-20  border-b md:border-b-0 md:border-r border-white/5 relative shrink-0">
+            {/* Ambient Glow for Side Panel */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(16,185,129,0.05),transparent_50%)] pointer-events-none" />
 
-          <motion.div
-            ref={carouselRef}
-            style={{
-              transform: `translateX(${-scrollProgress}px)`,
-            }}
-            className="flex gap-8 md:gap-16 px-8 md:px-16 items-center h-full will-change-transform"
-          >
-            {projects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </motion.div>
-
-          {/* Navigation Controls - Only visible when not locked */}
-          {!isLocked && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute bottom-8 right-8 flex items-center gap-4 z-30"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative z-10"
             >
-              {/* Previous Button */}
-              <motion.button
-                onClick={handlePrevCard}
-                disabled={currentCardIndex === 0}
-                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
-                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.button>
-
-              {/* Card Counter */}
-              <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                <span className="text-sm font-medium text-white">
-                  {currentCardIndex + 1} / {projects.length}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 backdrop-blur-sm mb-6">
+                <span className="text-sm font-medium text-emerald-300">
+                  Selected Works
                 </span>
               </div>
+              <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-6">
+                Recent
+                <br />
+                <span className="text-emerald-500">Projects</span>
+              </h2>
+              <p className="text-lg text-zinc-400 max-w-sm leading-relaxed mb-8">
+                Scroll to explore a collection of digital experiences designed
+                to impact and inspire.
+              </p>
 
-              {/* Next Button */}
-              <motion.button
-                onClick={handleNextCard}
-                disabled={currentCardIndex === projects.length - 1}
-                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
-                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.button>
+              {/* Scroll Progress Indicator */}
+              <div className="w-full max-w-xs">
+                <div className="flex justify-between text-xs text-zinc-500 mb-2">
+                  <span>Progress</span>
+                  <span>{projects.length} Projects</span>
+                </div>
+                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-emerald-500"
+                    style={{
+                      scaleX: maxScroll > 0 ? scrollProgress / maxScroll : 0,
+                      transformOrigin: "0%",
+                    }}
+                  />
+                </div>
+              </div>
             </motion.div>
-          )}
+          </div>
+
+          {/* Right/Bottom Scrolling Panel - Project Cards */}
+          <div className="flex-1 h-full flex items-center relative overflow-hidden">
+            {/* Ambient Glow for Main Area */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_50%)] pointer-events-none" />
+
+            <motion.div
+              ref={carouselRef}
+              style={{
+                transform: `translateX(${-scrollProgress}px)`,
+              }}
+              className="flex gap-8 md:gap-16 px-8 md:px-16 items-center h-full will-change-transform"
+            >
+              {projects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </motion.div>
+
+            {/* Navigation Controls - Only visible when not locked */}
+            {!isLocked && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute bottom-8 right-8 flex items-center gap-4 z-30"
+              >
+                {/* Previous Button */}
+                <motion.button
+                  onClick={handlePrevCard}
+                  disabled={currentCardIndex === 0}
+                  className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+                  <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.button>
+
+                {/* Card Counter */}
+                <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <span className="text-sm font-medium text-white">
+                    {currentCardIndex + 1} / {projects.length}
+                  </span>
+                </div>
+
+                {/* Next Button */}
+                <motion.button
+                  onClick={handleNextCard}
+                  disabled={currentCardIndex === projects.length - 1}
+                  className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+                  <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.button>
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
