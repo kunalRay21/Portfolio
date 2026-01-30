@@ -33,6 +33,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const [hasBeenViewed, setHasBeenViewed] = useState(false);
   const [hasEnteredFromTop, setHasEnteredFromTop] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [centerOffset, setCenterOffset] = useState(0);
 
   // Navigate to a specific card
   const navigateToCard = (index: number) => {
@@ -44,8 +45,10 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     const cardWidth = firstCard?.offsetWidth || 0;
     const gap = 64; // md:gap-16 = 64px
 
+    // Calculate position for this card to be centered
+    // Since transform is: translateX(centerOffset - scrollProgress)
     const targetScroll = index * (cardWidth + gap);
-    setScrollProgress(Math.min(targetScroll, maxScroll));
+    setScrollProgress(Math.max(0, Math.min(targetScroll, maxScroll)));
     setCurrentCardIndex(index);
   };
 
@@ -74,12 +77,17 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         ".project-card",
       ) as HTMLElement;
       const cardWidth = firstCard?.offsetWidth || 0;
+      const gap = 64; // md:gap-16 = 64px
 
-      // Position where last card is centered in the container
-      // scrollWidth - containerWidth brings last card to right edge
-      // Add half container width and subtract half card width to center it
-      const maxScrollToCenterLastCard =
-        scrollWidth - containerWidth / 2 - cardWidth / 2;
+      // Calculate offset to center first card
+      const offset = (containerWidth - cardWidth) / 2;
+      setCenterOffset(offset);
+
+      // Position where last card is centered
+      // Since transform is: translateX(centerOffset - scrollProgress)
+      // For last card to be centered: scrollProgress = lastCardIndex * (cardWidth + gap)
+      const lastCardIndex = projects.length - 1;
+      const maxScrollToCenterLastCard = lastCardIndex * (cardWidth + gap);
 
       setMaxScroll(Math.max(0, maxScrollToCenterLastCard));
     };
@@ -155,7 +163,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         const newProgress = prev + e.deltaY;
         const clampedProgress = Math.max(0, Math.min(newProgress, maxScroll));
 
-        // Unlock when fully scrolled and mark as viewed
+        // Unlock when last card is centered (reached maxScroll) and scrolling down
         if (clampedProgress >= maxScroll && e.deltaY > 0) {
           setIsLocked(false);
           setHasBeenViewed(true);
@@ -170,143 +178,141 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   }, [isLocked, maxScroll]);
 
   return (
-    <>
-      <div
-        ref={sectionRef}
-        className="relative bg-black min-h-screen h-screen overflow-hidden"
-        style={{
-          position: isLocked ? "sticky" : "relative",
-          top: isLocked ? 0 : "auto",
-          zIndex: isLocked ? 50 : "auto",
-        }}
-      >
-        {/* Particles Background */}
-        <div className="absolute inset-0 pointer-events-none z-[5]">
-          <Particles
-            className=""
-            particleCount={2000}
-            particleSpread={40}
-            speed={0.04}
-            particleColors={["#ffffff", "#e5e5e5", "#f5f5f5"]}
-            alphaParticles={true}
-            particleBaseSize={120}
-            sizeRandomness={1}
-            cameraDistance={10}
-            pixelRatio={
-              typeof window !== "undefined"
-                ? Math.min(window.devicePixelRatio, 2)
-                : 1
-            }
-          />
+    <div
+      ref={sectionRef}
+      className="relative overflow-hidden w-full min-h-screen flex items-center justify-center bg-black"
+      style={{
+        position: isLocked ? "sticky" : "relative",
+        top: isLocked ? 0 : "auto",
+        zIndex: isLocked ? 50 : "auto",
+      }}
+    >
+      {/* Particles Background */}
+      <div className="absolute inset-0 pointer-events-none z-5">
+        <Particles
+          className=""
+          particleCount={2000}
+          particleSpread={40}
+          speed={0.04}
+          particleColors={["#ffffff", "#e5e5e5", "#f5f5f5"]}
+          alphaParticles={true}
+          particleBaseSize={120}
+          sizeRandomness={1}
+          cameraDistance={10}
+          pixelRatio={
+            typeof window !== "undefined"
+              ? Math.min(window.devicePixelRatio, 2)
+              : 1
+          }
+        />
+      </div>
+
+      <div className="flex flex-col md:flex-row h-full w-full relative z-10">
+        {/* Left/Top Static Panel - Fixed Information */}
+        <div className="w-full md:w-[450px] lg:w-[35%] h-full md:h-full flex flex-col justify-center px-8 md:px-16 z-20  border-b md:border-b-0 md:border-r border-white/5 relative shrink-0">
+          {/* Ambient Glow for Side Panel */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(16,185,129,0.05),transparent_50%)] pointer-events-none" />
+
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 backdrop-blur-sm mb-6">
+              <span className="text-sm font-medium text-emerald-300">
+                Selected Works
+              </span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-6">
+              Recent
+              <br />
+              <span className="text-emerald-500">Projects</span>
+            </h2>
+            <p className="text-lg text-zinc-400 max-w-sm leading-relaxed mb-8">
+              Scroll to explore a collection of digital experiences designed to
+              impact and inspire.
+            </p>
+
+            {/* Scroll Progress Indicator */}
+            <div className="w-full max-w-xs">
+              <div className="flex justify-between text-xs text-zinc-500 mb-2">
+                <span>Progress</span>
+                <span>{projects.length} Projects</span>
+              </div>
+              <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-emerald-500"
+                  style={{
+                    scaleX: maxScroll > 0 ? scrollProgress / maxScroll : 0,
+                    transformOrigin: "0%",
+                  }}
+                />
+              </div>
+            </div>
+          </motion.div>
         </div>
 
-        <div className="flex flex-col md:flex-row h-full min-h-screen relative z-10">
-          {/* Left/Top Static Panel - Fixed Information */}
-          <div className="w-full md:w-[450px] lg:w-[35%] h-full md:h-full flex flex-col justify-center px-8 md:px-16 z-20  border-b md:border-b-0 md:border-r border-white/5 relative shrink-0">
-            {/* Ambient Glow for Side Panel */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(16,185,129,0.05),transparent_50%)] pointer-events-none" />
+        {/* Right/Bottom Scrolling Panel - Project Cards */}
+        <div className="flex-1 h-full flex items-center justify-center relative overflow-hidden">
+          {/* Ambient Glow for Main Area */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_50%)] pointer-events-none" />
 
+          <motion.div
+            ref={carouselRef}
+            style={{
+              transform: `translateX(${centerOffset - scrollProgress}px)`,
+            }}
+            className="flex gap-8 md:gap-16 items-center h-full will-change-transform"
+          >
+            {projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </motion.div>
+
+          {/* Navigation Controls - Only visible when not locked */}
+          {!isLocked && (
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="relative z-10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute bottom-8 right-8 flex items-center gap-4 z-30"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 backdrop-blur-sm mb-6">
-                <span className="text-sm font-medium text-emerald-300">
-                  Selected Works
+              {/* Previous Button */}
+              <motion.button
+                onClick={handlePrevCard}
+                disabled={currentCardIndex === 0}
+                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.button>
+
+              {/* Card Counter */}
+              <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                <span className="text-sm font-medium text-white">
+                  {currentCardIndex + 1} / {projects.length}
                 </span>
               </div>
-              <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-6">
-                Recent
-                <br />
-                <span className="text-emerald-500">Projects</span>
-              </h2>
-              <p className="text-lg text-zinc-400 max-w-sm leading-relaxed mb-8">
-                Scroll to explore a collection of digital experiences designed
-                to impact and inspire.
-              </p>
 
-              {/* Scroll Progress Indicator */}
-              <div className="w-full max-w-xs">
-                <div className="flex justify-between text-xs text-zinc-500 mb-2">
-                  <span>Progress</span>
-                  <span>{projects.length} Projects</span>
-                </div>
-                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-emerald-500"
-                    style={{
-                      scaleX: maxScroll > 0 ? scrollProgress / maxScroll : 0,
-                      transformOrigin: "0%",
-                    }}
-                  />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right/Bottom Scrolling Panel - Project Cards */}
-          <div className="flex-1 h-full flex items-center relative overflow-hidden">
-            {/* Ambient Glow for Main Area */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_50%)] pointer-events-none" />
-
-            <motion.div
-              ref={carouselRef}
-              style={{
-                transform: `translateX(${-scrollProgress}px)`,
-              }}
-              className="flex gap-8 md:gap-16 px-8 md:px-16 items-center h-full will-change-transform"
-            >
-              {projects.map((project, index) => (
-                <ProjectCard key={project.id} project={project} index={index} />
-              ))}
-            </motion.div>
-
-            {/* Navigation Controls - Only visible when not locked */}
-            {!isLocked && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute bottom-8 right-8 flex items-center gap-4 z-30"
+              {/* Next Button */}
+              <motion.button
+                onClick={handleNextCard}
+                disabled={currentCardIndex === projects.length - 1}
+                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {/* Previous Button */}
-                <motion.button
-                  onClick={handlePrevCard}
-                  disabled={currentCardIndex === 0}
-                  className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
-                  <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                </motion.button>
-
-                {/* Card Counter */}
-                <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <span className="text-sm font-medium text-white">
-                    {currentCardIndex + 1} / {projects.length}
-                  </span>
-                </div>
-
-                {/* Next Button */}
-                <motion.button
-                  onClick={handleNextCard}
-                  disabled={currentCardIndex === projects.length - 1}
-                  className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
-                  <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                </motion.button>
-              </motion.div>
-            )}
-          </div>
+                <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
