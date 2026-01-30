@@ -14,6 +14,7 @@ export { default as SectionHeader } from "./SectionHeader";
 export { default as StatsGrid } from "./StatsGrid";
 export { default as SkillsList } from "./SkillsList";
 export { default as ExperienceTimeline } from "./ExperienceTimeline";
+export { default as EducationTimeline } from "./EducationTimeline";
 
 export { aboutData } from "./aboutData";
 export type { AboutData, Skill, Experience, Education } from "./types";

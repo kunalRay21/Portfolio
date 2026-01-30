@@ -30,7 +30,7 @@ export default function ExperienceTimeline({
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -50, rotateY: -15 },
+    hidden: { opacity: 0, x: -50, rotateY: -5 },
     visible: {
       opacity: 1,
       x: 0,
@@ -105,9 +105,9 @@ export default function ExperienceTimeline({
               delay: index * 0.15,
             }}
             whileHover={{
-              scale: 1.02,
-              x: 8,
-              rotateY: 2,
+              scale: 1.01,
+              x: 4,
+              rotateY: 1,
               transition: { duration: 0.3 },
             }}
             style={{ perspective: "1000px" }}
@@ -180,7 +180,7 @@ export default function ExperienceTimeline({
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 text-sm text-zinc-400 mt-2 md:mt-0">
+                <div className="flex items-center gap-2 text-sm text-zinc-300 mt-2 md:mt-0">
                   <Calendar className="w-4 h-4" />
                   {exp.duration}
                 </div>

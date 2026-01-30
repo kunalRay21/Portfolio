@@ -92,8 +92,8 @@ export default function SkillsList({ skills }: SkillsListProps) {
               </motion.h3>
             </div>
 
-            {/* Skills Grid with wave pattern */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Skills Grid - Badge Layout */}
+            <div className="flex flex-wrap gap-3">
               {categorySkills.map((skill, idx) => (
                 <SkillCard key={skill.id} skill={skill} index={idx} />
               ))}
@@ -113,19 +113,21 @@ interface SkillCardProps {
 function SkillCard({ skill, index }: SkillCardProps) {
   return (
     <motion.div
-      className="group relative p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden"
-      initial={{ opacity: 0, scale: 0.8, rotateX: -20 }}
-      whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
+      className="group relative px-4 py-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden"
+      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{
         type: "spring" as const,
-        stiffness: 100,
+        stiffness: 120,
         damping: 15,
-        delay: index * 0.05,
+        delay: index * 0.03,
       }}
       whileHover={{
-        scale: 1.03,
+        scale: 1.05,
         y: -4,
+        borderColor: "rgba(16, 185, 129, 0.3)",
+        backgroundColor: "rgba(16, 185, 129, 0.05)",
         transition: { duration: 0.2 },
       }}
     >
@@ -146,79 +148,30 @@ function SkillCard({ skill, index }: SkillCardProps) {
         }}
       />
 
-      <div className="flex items-center justify-between mb-2 relative z-10">
+      {/* Skill Name - Centered Badge Style */}
+      <div className="relative z-10 flex items-center justify-center">
         <motion.span
-          className="text-sm font-medium text-white"
-          whileHover={{ x: 5 }}
+          className="text-sm font-medium text-white text-center"
+          whileHover={{ scale: 1.05 }}
           transition={{ type: "spring" as const, stiffness: 300 }}
         >
           {skill.name}
         </motion.span>
-        <motion.span
-          className="text-xs text-zinc-400 tabular-nums"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: index * 0.05 + 0.3 }}
-        >
-          {skill.proficiency}%
-        </motion.span>
       </div>
 
-      {/* Progress Bar with liquid fill effect */}
-      <div className="relative w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-        {/* Animated background shimmer */}
-        <motion.div
-          className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
-          animate={{
-            x: ["-100%", "200%"],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear",
-            delay: index * 0.1,
-          }}
-        />
-
-        {/* Main progress bar with wave effect */}
-        <motion.div
-          className="absolute inset-y-0 left-0 bg-linear-to-r from-emerald-500 to-emerald-400 rounded-full"
-          initial={{ width: 0 }}
-          whileInView={{ width: `${skill.proficiency}%` }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 1.2,
-            ease: [0.43, 0.13, 0.23, 0.96],
-            delay: index * 0.08,
-          }}
-        />
-
-        {/* Glow effect that follows the progress */}
-        <motion.div
-          className="absolute inset-y-0 left-0 bg-emerald-500/50 rounded-full blur-sm"
-          initial={{ width: 0 }}
-          whileInView={{ width: `${skill.proficiency}%` }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 1.2,
-            ease: [0.43, 0.13, 0.23, 0.96],
-            delay: index * 0.08,
-          }}
-        />
-
-        {/* Moving light particle */}
-        <motion.div
-          className="absolute inset-y-0 w-1 bg-white rounded-full shadow-lg shadow-emerald-500"
-          initial={{ left: 0 }}
-          animate={{ left: `${skill.proficiency}%` }}
-          transition={{
-            duration: 1.2,
-            ease: [0.43, 0.13, 0.23, 0.96],
-            delay: index * 0.08,
-          }}
-        />
-      </div>
+      {/* Optional glow pulse effect */}
+      <motion.div
+        className="absolute -inset-1 rounded-xl bg-emerald-500/20 blur-md opacity-0 group-hover:opacity-100 -z-10"
+        animate={{
+          opacity: [0, 0.3, 0],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: index * 0.1,
+        }}
+      />
     </motion.div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { signatureFont } from "@/app/fonts";
 import Particles from "@/components/Particles";
@@ -7,6 +8,7 @@ import SectionHeader from "./SectionHeader";
 import StatsGrid from "./StatsGrid";
 import SkillsList from "./SkillsList";
 import ExperienceTimeline from "./ExperienceTimeline";
+import EducationTimeline from "./EducationTimeline";
 import { aboutData } from "./aboutData";
 
 /**
@@ -25,16 +27,37 @@ import { aboutData } from "./aboutData";
  */
 
 export default function AboutSection() {
+  // Fix 2: Mobile Performance Optimization
+  const [particleCount, setParticleCount] = useState(1500);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Mobile detection: width < 768px
+      if (window.innerWidth < 768) {
+        setParticleCount(300);
+      } else {
+        setParticleCount(1500);
+      }
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Listen for window resize
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section
       id="about"
       className="relative w-full bg-linear-to-b from-black via-black to-transparent overflow-hidden"
     >
-      {/* Particles Background */}
+      {/* Particles Background - Optimized for Mobile */}
       <div className="absolute inset-0 pointer-events-none z-5 opacity-40">
         <Particles
           className=""
-          particleCount={1500}
+          particleCount={particleCount}
           particleSpread={40}
           speed={0.03}
           particleColors={["#10B981", "#34D399", "#6EE7B7"]}
@@ -122,7 +145,7 @@ export default function AboutSection() {
 
             {/* Tagline with typewriter effect */}
             <motion.p
-              className="text-center text-lg md:text-xl text-zinc-400 mb-6"
+              className="text-center text-lg md:text-xl text-zinc-300 mb-6"
               initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
@@ -165,6 +188,72 @@ export default function AboutSection() {
             subtitle="Building innovative solutions and leading teams across various industries."
           />
           <ExperienceTimeline experiences={aboutData.experience} />
+        </div>
+
+        {/* Education Section - Fix 3 */}
+        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16">
+          <SectionHeader
+            badge="Academic Background"
+            title="Education"
+            subtitle="Formal education and continuous learning journey."
+          />
+          <EducationTimeline education={aboutData.education} />
+        </div>
+
+        {/* Download Resume CTA - Fix 5 */}
+        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16 flex justify-center">
+          <motion.a
+            href="/resume.pdf"
+            download
+            className="group relative px-8 py-4 rounded-full bg-emerald-500 text-white font-semibold text-lg overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{
+              scale: 1.05,
+              backgroundColor: "#059669",
+              boxShadow: "0 20px 40px rgba(16, 185, 129, 0.4)",
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Shimmer effect */}
+            <motion.div
+              className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
+              animate={{
+                x: ["-100%", "200%"],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "linear",
+                repeatDelay: 1,
+              }}
+            />
+            <span className="relative z-10 flex items-center gap-2">
+              Download Resume
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                animate={{
+                  y: [0, 4, 0],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </motion.svg>
+            </span>
+          </motion.a>
         </div>
 
         {/* Bottom Spacing */}
