@@ -43,7 +43,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
       ".project-card",
     ) as HTMLElement;
     const cardWidth = firstCard?.offsetWidth || 0;
-    const gap = 64; // md:gap-16 = 64px
+    const gap = 32; // md:gap-16 = 64px
 
     // Calculate position for this card to be centered
     // Since transform is: translateX(centerOffset - scrollProgress)
@@ -180,9 +180,9 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   return (
     <div
       ref={sectionRef}
-      className="relative overflow-hidden w-full min-h-screen flex items-center justify-center bg-black"
+      className="relative overflow-hidden w-full h-screen flex items-center justify-center bg-black"
       style={{
-        position: isLocked ? "sticky" : "relative",
+        position: isLocked ? "fixed" : "relative",
         top: isLocked ? 0 : "auto",
         zIndex: isLocked ? 50 : "auto",
       }}
@@ -207,9 +207,9 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row h-full w-full relative z-10">
+      <div className="flex flex-col md:flex-row w-full h-full relative z-10 ">
         {/* Left/Top Static Panel - Fixed Information */}
-        <div className="w-full md:w-[450px] lg:w-[35%] h-full md:h-full flex flex-col justify-center px-8 md:px-16 z-20  border-b md:border-b-0 md:border-r border-white/5 relative shrink-0">
+        <div className="w-full md:w-[450px] lg:w-[35%] h-full md:h-full flex flex-col justify-center px-8 md:px-16 z-20 border-b md:border-b-0 md:border-r border-white/5 relative shrink-0">
           {/* Ambient Glow for Side Panel */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(16,185,129,0.05),transparent_50%)] pointer-events-none" />
 
@@ -263,54 +263,53 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
             style={{
               transform: `translateX(${centerOffset - scrollProgress}px)`,
             }}
-            className="flex gap-8 md:gap-16 items-center h-full will-change-transform"
+            className=" flex gap-8 md:gap-16 items-center h-full w-full"
           >
             {projects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </motion.div>
-
-          {/* Navigation Controls - Only visible when not locked */}
-          {!isLocked && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute bottom-8 right-8 flex items-center gap-4 z-30"
-            >
-              {/* Previous Button */}
-              <motion.button
-                onClick={handlePrevCard}
-                disabled={currentCardIndex === 0}
-                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
-                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.button>
-
-              {/* Card Counter */}
-              <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                <span className="text-sm font-medium text-white">
-                  {currentCardIndex + 1} / {projects.length}
-                </span>
-              </div>
-
-              {/* Next Button */}
-              <motion.button
-                onClick={handleNextCard}
-                disabled={currentCardIndex === projects.length - 1}
-                className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
-                <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.button>
-            </motion.div>
-          )}
         </div>
+        {/* Navigation Controls - Only visible when not locked */}
+        {!isLocked && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute bottom-4 right-8 flex items-center gap-4 z-30"
+          >
+            {/* Previous Button */}
+            <motion.button
+              onClick={handlePrevCard}
+              disabled={currentCardIndex === 0}
+              className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronLeft className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+              <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            </motion.button>
+
+            {/* Card Counter */}
+            <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+              <span className="text-sm font-medium text-white">
+                {currentCardIndex + 1} / {projects.length}
+              </span>
+            </div>
+
+            {/* Next Button */}
+            <motion.button
+              onClick={handleNextCard}
+              disabled={currentCardIndex === projects.length - 1}
+              className="group relative p-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronRight className="w-6 h-6 text-white group-hover:text-emerald-400 transition-colors" />
+              <div className="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            </motion.button>
+          </motion.div>
+        )}
       </div>
     </div>
   );

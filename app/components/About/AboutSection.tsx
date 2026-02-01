@@ -8,7 +8,6 @@ import SectionHeader from "./SectionHeader";
 import StatsGrid from "./StatsGrid";
 import SkillsList from "./SkillsList";
 import ExperienceTimeline from "./ExperienceTimeline";
-import EducationTimeline from "./EducationTimeline";
 import { aboutData } from "./aboutData";
 import { useResumeModal } from "@/app/contexts/ResumeModalContext";
 import { techIconMap } from "./techIcons";
@@ -238,16 +237,6 @@ export default function AboutSection() {
             subtitle="Building innovative solutions and leading teams across various industries."
           />
           <ExperienceTimeline experiences={aboutData.experience} />
-        </div>
-
-        {/* Education Section - Fix 3 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-8 md:py-12">
-          <SectionHeader
-            badge="Academic Background"
-            title="Education"
-            subtitle="Formal education and continuous learning journey."
-          />
-          <EducationTimeline education={aboutData.education} />
         </div>
 
         {/* Download Resume CTA - Fix 5 */}

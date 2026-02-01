@@ -26,7 +26,12 @@ export default function Carousel3D({
   const [isPaused, setIsPaused] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const baseVelocity = -30; // Base scrolling speed (negative = left to right)
-  const x = useMotionValue(0);
+  const cardWidth = 350;
+  const gap = 32;
+  // Start with offset so first card is centered
+  const initialOffset =
+    typeof window !== "undefined" ? window.innerWidth / 2 - cardWidth / 2 : 0;
+  const x = useMotionValue(initialOffset);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Triple the projects for seamless infinite scroll
@@ -60,26 +65,30 @@ export default function Carousel3D({
 
   useAnimationFrame((t, delta) => {
     if (!isPaused) {
-      // Calculate velocity with scroll sync
+      // 1. Calculate how much to move
       const velocityFactor = 1 + Math.abs(scrollVelocity) * 0.0005;
       const moveBy = (baseVelocity * delta * velocityFactor) / 1000;
 
-      x.set(x.get() + moveBy);
+      // 2. Apply movement (Moving Left)
+      let newX = x.get() + moveBy;
 
-      // Reset position for infinite loop
-      const resetPoint = -(projects.length * 400); // 400px is card width + gap
-      if (x.get() <= resetPoint) {
-        x.set(0);
+      // 3. Calculate the EXACT width of one full set of projects
+      const singleSetWidth = (cardWidth + gap) * projects.length;
+
+      // 4. The Seamless Reset Logic
+      // Account for initial offset in reset calculation
+      const resetThreshold = initialOffset - singleSetWidth;
+      if (newX <= resetThreshold) {
+        newX = initialOffset;
       }
+
+      x.set(newX);
     }
 
-    // Calculate which project is currently centered (visible in viewport)
-    const cardWidth = 350 + 32; // 350px width + 32px gap (8*4)
-    const currentPosition = Math.abs(x.get());
+    // Update centered card index
+    const currentPosition = Math.abs(x.get() - initialOffset);
     const centeredIndex =
-      Math.floor(currentPosition / cardWidth) % projects.length;
-
-    // Notify parent of centered project change
+      Math.floor(currentPosition / (cardWidth + gap)) % projects.length;
     onCenterChange?.(centeredIndex);
   });
 
@@ -93,7 +102,7 @@ export default function Carousel3D({
 
       {/* 3D Carousel Container */}
       <motion.div
-        className="flex gap-8 absolute left-0 h-full items-center"
+        className="flex gap-8 absolute left-0 h-full items-center will-change-transform"
         style={{
           x,
           perspective: "1200px",
