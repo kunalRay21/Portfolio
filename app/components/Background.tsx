@@ -20,18 +20,20 @@ export default function Background({
       className={`fixed inset-0 pointer-events-none z-0 w-screen h-screen ${bgColors[variant]}`}
     >
       <Particles
-        particleCount={4000}
-        particleSpread={22}
-        speed={0.04}
-        particleColors={["#ffffff"]}
-        moveParticlesOnHover={false}
-        particleHoverFactor={1}
+        className=""
+        particleCount={20000}
+        particleSpread={40}
+        speed={0.03}
+        particleColors={["#10B981", "#34D399", "#6EE7B7"]}
         alphaParticles={true}
         particleBaseSize={100}
-        sizeRandomness={5}
-        cameraDistance={100}
-        disableRotation={false}
-        className=""
+        sizeRandomness={1}
+        cameraDistance={10}
+        pixelRatio={
+          typeof window !== "undefined"
+            ? Math.min(window.devicePixelRatio, 2)
+            : 1
+        }
       />
       {children}
     </div>

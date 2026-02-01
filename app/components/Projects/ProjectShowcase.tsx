@@ -191,12 +191,12 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
       <div className="absolute inset-0 pointer-events-none z-5">
         <Particles
           className=""
-          particleCount={2000}
+          particleCount={10000}
           particleSpread={40}
-          speed={0.04}
-          particleColors={["#ffffff", "#e5e5e5", "#f5f5f5"]}
+          speed={0.03}
+          particleColors={["#10B981", "#34D399", "#6EE7B7"]}
           alphaParticles={true}
-          particleBaseSize={120}
+          particleBaseSize={100}
           sizeRandomness={1}
           cameraDistance={10}
           pixelRatio={

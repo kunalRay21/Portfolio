@@ -60,11 +60,11 @@ export default function AboutSection() {
       <div className="absolute inset-0 pointer-events-none z-5 opacity-40">
         <Particles
           className=""
-          particleCount={particleCount}
+          particleCount={10000}
           particleSpread={40}
           speed={0.03}
           particleColors={["#10B981", "#34D399", "#6EE7B7"]}
-          alphaParticles={true}
+          alphaParticles={false}
           particleBaseSize={100}
           sizeRandomness={1}
           cameraDistance={10}
