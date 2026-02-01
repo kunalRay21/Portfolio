@@ -2,6 +2,7 @@ export interface NavItem {
   id: string;
   label: string;
   href: string;
+  isExternal?: boolean;
 }
 
 export const navItems: NavItem[] = [
@@ -13,6 +14,7 @@ export const navItems: NavItem[] = [
   {
     id: "resume",
     label: "Resume",
-    href: "#resume",
+    href: "/Ray.pdf",
+    isExternal: true,
   },
 ];

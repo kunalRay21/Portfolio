@@ -10,6 +10,8 @@ import SkillsList from "./SkillsList";
 import ExperienceTimeline from "./ExperienceTimeline";
 import EducationTimeline from "./EducationTimeline";
 import { aboutData } from "./aboutData";
+import { useResumeModal } from "@/app/contexts/ResumeModalContext";
+import { techIconMap } from "./techIcons";
 
 /**
  * AboutSection Component
@@ -27,6 +29,8 @@ import { aboutData } from "./aboutData";
  */
 
 export default function AboutSection() {
+  const { openResume } = useResumeModal();
+
   // Fix 2: Mobile Performance Optimization
   const [particleCount, setParticleCount] = useState(1500);
 
@@ -82,7 +86,7 @@ export default function AboutSection() {
       {/* Main Content Container */}
       <div className="relative z-10">
         {/* Hero Introduction - Compact */}
-        <div className="flex items-center justify-center px-6 md:px-10 lg:px-16 py-16 md:py-24">
+        <div className="flex items-center justify-center px-6 md:px-10 lg:px-16 py-12 md:py-16">
           <motion.div
             className="max-w-6xl w-full"
             initial={{ opacity: 0, rotateX: 15 }}
@@ -145,7 +149,7 @@ export default function AboutSection() {
 
             {/* Tagline with typewriter effect */}
             <motion.p
-              className="text-center text-lg md:text-xl text-zinc-300 mb-6"
+              className="text-center text-lg md:text-xl text-zinc-300 mb-8"
               initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
@@ -153,35 +157,81 @@ export default function AboutSection() {
             >
               {aboutData.tagline}
             </motion.p>
-
-            {/* Description with reveal animation */}
-            <motion.p
-              className="text-center text-base text-zinc-300 max-w-2xl mx-auto leading-relaxed mb-12"
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
-            >
-              {aboutData.description}
-            </motion.p>
-
-            {/* Stats Grid */}
-            <StatsGrid stats={aboutData.stats} />
           </motion.div>
         </div>
 
-        {/* Skills Section */}
-        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16">
-          <SectionHeader
-            badge="Technical Expertise"
-            title="Skills & Technologies"
-            subtitle="A comprehensive toolkit built through years of hands-on experience and continuous learning."
-          />
-          <SkillsList skills={aboutData.skills} />
+        {/* Two Column Grid - Description & Technologies */}
+        <div className="max-w-6xl mx-auto px-6  py-8 md:py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
+            {/* Left Side - Description (60%) */}
+            <motion.div
+              className="lg:col-span-6 space-y-6"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              {/* Description */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-4">About Me</h2>
+                <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                  {aboutData.description}
+                </p>
+              </div>
+
+              {/* Stats Grid */}
+              <StatsGrid stats={aboutData.stats} />
+            </motion.div>
+
+            {/* Right Side - Technologies (40%) */}
+            <motion.div
+              className="lg:col-span-4"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 border border-zinc-800">
+                <h3 className="text-xl font-semibold text-white mb-6">
+                  Technologies
+                </h3>
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {aboutData.skills.map((skill, index) => {
+                    const techConfig = techIconMap[skill.id];
+                    if (!techConfig) return null;
+
+                    const Icon = techConfig.icon;
+
+                    return (
+                      <motion.a
+                        key={skill.id}
+                        href={techConfig.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center gap-2 group cursor-pointer"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.05 }}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        <div className="w-16 h-16 rounded-full bg-linear-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg">
+                          <Icon className="w-8 h-8 text-white" />
+                        </div>
+                        <span className="text-xs text-zinc-400 text-center max-w-20 group-hover:text-emerald-400 transition-colors">
+                          {skill.name}
+                        </span>
+                      </motion.a>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Experience Section */}
-        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-8 md:py-12">
           <SectionHeader
             badge="Professional Journey"
             title="Work Experience"
@@ -191,7 +241,7 @@ export default function AboutSection() {
         </div>
 
         {/* Education Section - Fix 3 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-8 md:py-12">
           <SectionHeader
             badge="Academic Background"
             title="Education"
@@ -201,11 +251,10 @@ export default function AboutSection() {
         </div>
 
         {/* Download Resume CTA - Fix 5 */}
-        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16 flex justify-center">
-          <motion.a
-            href="/resume.pdf"
-            download
-            className="group relative px-8 py-4 rounded-full bg-emerald-500 text-white font-semibold text-lg overflow-hidden"
+        <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-16 py-8 md:py-12 flex justify-center">
+          <motion.button
+            onClick={openResume}
+            className="group relative px-8 py-4 rounded-full bg-emerald-500 text-white font-semibold text-lg overflow-hidden cursor-pointer"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -231,14 +280,14 @@ export default function AboutSection() {
               }}
             />
             <span className="relative z-10 flex items-center gap-2">
-              Download Resume
+              View Resume
               <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 animate={{
-                  y: [0, 4, 0],
+                  x: [0, 4, 0],
                 }}
                 transition={{
                   duration: 1.5,
@@ -248,16 +297,16 @@ export default function AboutSection() {
               >
                 <path
                   fillRule="evenodd"
-                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                  d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
                   clipRule="evenodd"
                 />
               </motion.svg>
             </span>
-          </motion.a>
+          </motion.button>
         </div>
 
         {/* Bottom Spacing */}
-        <div className="h-20" />
+        <div className="h-12" />
       </div>
     </section>
   );
