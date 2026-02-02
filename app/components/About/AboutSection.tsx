@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { signatureFont } from "@/app/fonts";
 import Particles from "@/components/Particles";
 import SectionHeader from "./SectionHeader";
-import StatsGrid from "./StatsGrid";
 import SkillsList from "./SkillsList";
 import ExperienceTimeline from "./ExperienceTimeline";
 import { aboutData } from "./aboutData";
@@ -164,22 +163,89 @@ export default function AboutSection() {
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
             {/* Left Side - Description (60%) */}
             <motion.div
-              className="lg:col-span-6 space-y-6"
+              className="lg:col-span-6"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              {/* Description */}
-              <div>
-                <h2 className="text-3xl font-bold text-white mb-4">About Me</h2>
-                <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-                  {aboutData.description}
-                </p>
-              </div>
+              {/* Description with gradient border card */}
+              <div className="relative group">
+                {/* Animated gradient border */}
+                <motion.div
+                  className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity"
+                  animate={{
+                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{ backgroundSize: "200% 200%" }}
+                />
 
-              {/* Stats Grid */}
-              <StatsGrid stats={aboutData.stats} />
+                {/* Content card */}
+                <div className="relative bg-zinc-900/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-zinc-800">
+                  {/* Animated typing effect paragraph */}
+                  <motion.div
+                    className="text-base md:text-lg text-zinc-300 leading-relaxed space-y-4 relative"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                  >
+                    <p className="relative">
+                      <motion.span
+                        className="inline-block"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: "auto" }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5, duration: 1.5 }}
+                      >
+                        {aboutData.description}
+                      </motion.span>
+                      <motion.span
+                        className="inline-block w-0.5 h-5 bg-emerald-500 ml-1"
+                        animate={{
+                          opacity: [1, 0, 1],
+                        }}
+                        transition={{
+                          duration: 0.8,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                      />
+                    </p>
+                  </motion.div>
+
+                  {/* Decorative elements */}
+                  <motion.div
+                    className="absolute top-4 right-4 w-20 h-20 border border-emerald-500/20 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 180, 360],
+                    }}
+                    transition={{
+                      duration: 8,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                  <motion.div
+                    className="absolute bottom-4 left-4 w-16 h-16 border border-emerald-500/10 rounded-lg"
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      rotate: [0, -90, -180, -270, -360],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                </div>
+              </div>
             </motion.div>
 
             {/* Right Side - Technologies (40%) */}

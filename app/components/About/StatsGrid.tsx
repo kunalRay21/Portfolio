@@ -137,7 +137,7 @@ function StatCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="group relative p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden cursor-pointer"
+      className="group relative p-4 sm:p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden cursor-pointer min-h-[100px] sm:min-h-[120px] flex items-center justify-center"
     >
       {/* Glow effect on hover */}
       <motion.div
@@ -160,19 +160,22 @@ function StatCard({
         />
       )}
 
-      <div className="relative z-10" style={{ transform: "translateZ(30px)" }}>
+      <div
+        className="relative z-10 flex flex-col items-center text-center"
+        style={{ transform: "translateZ(30px)" }}
+      >
         <motion.div
-          className="text-3xl md:text-4xl font-bold text-white mb-2"
+          className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1.5 leading-tight"
           animate={{
             color: isHovered ? "#10B981" : "#FFFFFF",
-            scale: isHovered ? 1.1 : 1,
+            scale: isHovered ? 1.05 : 1,
           }}
           transition={{ duration: 0.3 }}
         >
           {stat.value}
         </motion.div>
         <motion.div
-          className="text-xs md:text-sm text-zinc-400"
+          className="text-[10px] sm:text-xs md:text-sm text-zinc-400 uppercase tracking-wider"
           animate={{
             color: isHovered ? "#D1D5DB" : "#A1A1AA",
           }}
