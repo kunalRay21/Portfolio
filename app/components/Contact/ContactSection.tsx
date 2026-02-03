@@ -1,5 +1,26 @@
 "use client";
 
+/**
+ * ContactSection Component
+ * ========================
+ *
+ * ⚙️ SETUP REQUIRED:
+ * This form uses Formspree for static form handling (GitHub Pages compatible).
+ *
+ * To activate:
+ * 1. Go to https://formspree.io/ and sign up (free)
+ * 2. Create a new form and get your form ID
+ * 3. Replace 'YOUR_FORM_ID' in the handleSubmit function (line ~48)
+ *    with your actual Formspree form ID
+ *
+ * Example: https://formspree.io/f/xwpkgolo
+ *                                    ^^^^^^^^ this is your form ID
+ *
+ * Alternative services:
+ * - Getform: https://getform.io/
+ * - EmailJS: https://www.emailjs.com/
+ */
+
 import { useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Mail, Github, Linkedin, Twitter, Send } from "lucide-react";
@@ -35,15 +56,16 @@ export default function ContactSection() {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      const response = await fetch("/api/contact", {
+      // Using Formspree for static form handling
+      // Replace 'YOUR_FORM_ID' with your actual Formspree form ID
+      // Get one free at https://formspree.io/
+      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         setSubmitStatus({
@@ -54,7 +76,7 @@ export default function ContactSection() {
       } else {
         setSubmitStatus({
           type: "error",
-          message: data.error || "Failed to send message. Please try again.",
+          message: "Failed to send message. Please try again.",
         });
       }
     } catch (error) {

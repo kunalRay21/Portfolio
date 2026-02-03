@@ -1,4 +1,3 @@
-import { div } from "framer-motion/client";
 import { projects } from "./projectsData";
 import ProjectShowcase from "./ProjectShowcase";
 

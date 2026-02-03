@@ -17,10 +17,10 @@ export const aboutData: AboutData = {
     "I am a Computer Science Engineer dedicated to growing my technical expertise by building practical, real-world applications. My focus is on mastering Data Structures & Algorithms while developing robust web solutions that bridge complex backend logic with responsive, user-centric frontends. I thrive on solving challenging problems and transforming ideas into scalable, production-ready applications. Whether it's crafting seamless user experiences or architecting efficient backend systems, I'm committed to writing clean, maintainable code that makes a difference.",
 
   stats: [
-    { label: "Specialty", value: "Full-Stack" },
-    { label: "Focus", value: "DSA" },
-    { label: "Approach", value: "Clean Code" },
-    { label: "Mindset", value: "Growth" },
+    { label: "Role", value: "Developer & Designer" },
+    { label: "Core", value: "System Design" },
+    { label: "Mindset", value: "Problem Solving" },
+    { label: "Focus", value: "User Experience" },
   ],
 
   skills: [

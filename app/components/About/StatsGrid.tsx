@@ -175,9 +175,9 @@ function StatCard({
           {stat.value}
         </motion.div>
         <motion.div
-          className="text-[10px] sm:text-xs md:text-sm text-zinc-400 uppercase tracking-wider"
+          className="text-[10px] sm:text-xs md:text-xs text-neutral-500 font-mono tracking-widest uppercase"
           animate={{
-            color: isHovered ? "#D1D5DB" : "#A1A1AA",
+            color: isHovered ? "#10B981" : "#737373",
           }}
           transition={{ duration: 0.3 }}
         >

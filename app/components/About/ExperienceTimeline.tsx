@@ -161,7 +161,7 @@ export default function ExperienceTimeline({
                     </motion.h3>
                     {exp.current && (
                       <motion.span
-                        className="px-2 py-1 text-xs font-medium text-emerald-300 bg-emerald-500/20 border border-emerald-500/30 rounded-full"
+                        className="px-2 py-1 text-[10px] font-mono tracking-wider uppercase text-emerald-300 bg-emerald-500/20 border border-emerald-500/30 rounded-full"
                         animate={{
                           scale: [1, 1.05, 1],
                         }}
@@ -175,7 +175,7 @@ export default function ExperienceTimeline({
                       </motion.span>
                     )}
                   </div>
-                  <p className="text-emerald-400 font-medium mb-2">
+                  <p className="text-emerald-400 font-mono text-sm tracking-wide mb-2 uppercase">
                     {exp.company}
                   </p>
                 </div>
@@ -221,7 +221,7 @@ export default function ExperienceTimeline({
                       borderColor: "rgba(16, 185, 129, 0.3)",
                       color: "#6EE7B7",
                     }}
-                    className="px-3 py-1 text-xs font-medium text-zinc-300 bg-white/5 border border-white/10 rounded-full transition-all cursor-default"
+                    className="px-3 py-1.5 text-[10px] font-mono tracking-wide text-neutral-400 bg-white/5 border border-white/10 rounded-full transition-all cursor-default uppercase"
                   >
                     {tech}
                   </motion.span>
