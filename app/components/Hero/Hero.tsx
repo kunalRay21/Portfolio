@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, easeOut } from "framer-motion";
-import { signatureFont } from "@/app/fonts";
 import CanvasBackgroundOverlay from "./CanvasBackgroundOverlay";
 import Particles from "@/components/Particles";
 
@@ -67,7 +66,7 @@ export default function Hero() {
         >
           <motion.span
             variants={wordVariants}
-            className={`inline-block text-[#C9C5B1] ${signatureFont.className}`}
+            className="inline-block text-[#C9C5B1] font-signature"
             style={{ fontSize: "1.15em" }}
           >
             Designing
@@ -88,7 +87,7 @@ export default function Hero() {
           </motion.span>{" "}
           <motion.span
             variants={wordVariants}
-            className={`inline-block text-[#C9C5B1] ${signatureFont.className}`}
+            className="inline-block text-[#C9C5B1] font-signature"
             style={{ fontSize: "1.15em" }}
           >
             complexity.

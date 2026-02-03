@@ -3,8 +3,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "Courier New", monospace;
 }
 
 html,
@@ -34,6 +34,11 @@ body::-webkit-scrollbar {
 
 canvas {
   pointer-events: none;
+}
+
+/* Signature Font */
+.font-signature {
+  font-family: "Allura", cursive;
 }
 
 @keyframes fadeInZoom {

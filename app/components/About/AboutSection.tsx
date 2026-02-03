@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { signatureFont } from "@/app/fonts";
 import Particles from "@/components/Particles";
 import SectionHeader from "./SectionHeader";
 import SkillsList from "./SkillsList";
@@ -101,7 +100,7 @@ export default function AboutSection() {
               viewport={{ once: true }}
             >
               <motion.span
-                className={`inline-block text-[#C9C5B1] ${signatureFont.className}`}
+                className="inline-block text-[#C9C5B1] font-signature"
                 initial={{ opacity: 0, x: -50, rotateY: -90 }}
                 whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
                 viewport={{ once: true }}
@@ -130,7 +129,7 @@ export default function AboutSection() {
                 {aboutData.headlineCenter}
               </motion.span>{" "}
               <motion.span
-                className={`inline-block text-[#C9C5B1] ${signatureFont.className}`}
+                className="inline-block text-[#C9C5B1] font-signature"
                 initial={{ opacity: 0, x: -50, rotateY: -90 }}
                 whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
                 viewport={{ once: true }}
