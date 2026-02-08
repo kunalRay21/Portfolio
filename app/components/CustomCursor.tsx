@@ -28,12 +28,14 @@ export default function CustomCursor() {
   return (
     <>
       <style>{`
-        * {
-          cursor: none !important;
+        @media (min-width: 768px) {
+          * {
+            cursor: none !important;
+          }
         }
       `}</style>
       <div
-        className={`fixed pointer-events-none z-9999 transition-opacity duration-200 ${
+        className={`hidden md:block fixed pointer-events-none z-9999 transition-opacity duration-200 ${
           isVisible ? "opacity-100" : "opacity-0"
         }`}
         style={{

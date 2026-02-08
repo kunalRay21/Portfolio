@@ -9,18 +9,18 @@ import { AboutData } from "./types";
  */
 
 export const aboutData: AboutData = {
-  headlinePrefix: "Engineering",
-  headlineCenter: "Scalable",
-  headlineHighlight: "Solutions",
-  tagline: "Computer Science Engineer & Full-Stack Developer",
+  headlinePrefix: "Architecting",
+  headlineCenter: "Digital",
+  headlineHighlight: "Infrastructures",
+  tagline: "Full-Stack Operator & Systems Engineer",
   description:
-    "I am a Computer Science Engineer dedicated to growing my technical expertise by building practical, real-world applications. My focus is on mastering Data Structures & Algorithms while developing robust web solutions that bridge complex backend logic with responsive, user-centric frontends. I thrive on solving challenging problems and transforming ideas into scalable, production-ready applications. Whether it's crafting seamless user experiences or architecting efficient backend systems, I'm committed to writing clean, maintainable code that makes a difference.",
+    "I operate at the intersection of complex backend logic and user-centric frontend protocols. My mission is to engineer robust, scalable applications that solve real-world parameters. By mastering algorithms and leveraging modern frameworks, I transform abstract concepts into production-grade systems. I am dedicated to writing clean, maintainable code—optimizing performance and ensuring seamless execution across all digital environments.",
 
   stats: [
-    { label: "Role", value: "Developer & Designer" },
-    { label: "Core", value: "System Design" },
-    { label: "Mindset", value: "Problem Solving" },
-    { label: "Focus", value: "User Experience" },
+    { label: "PROTOCOL", value: "Full-Stack Dev" },
+    { label: "MASTERY", value: "System Architecture" },
+    { label: "ALGORITHM", value: "Data Structures" },
+    { label: "OUTPUT", value: "High Fidelity" },
   ],
 
   skills: [
@@ -94,30 +94,30 @@ export const aboutData: AboutData = {
   experience: [
     {
       id: "exp1",
-      role: "Lead Full-Stack Developer",
-      company: "Parts Big Boss (Project)",
+      role: "Lead Systems Architect",
+      company: "Parts Big Boss (Start Up)",
       duration: "Jan 2026 - Present",
       description:
-        "Developing a comprehensive e-commerce platform using the PERN stack. Replicating Magento functionalities and integrating Odoo for backend operations and inventory management.",
+        "Orchestrating a comprehensive e-commerce platform using the PERN stack. Re-engineering Magento core functionalities and integrating Odoo modules for seamless backend operations and specialized inventory management.",
       technologies: ["React", "Node.js", "PostgreSQL", "Odoo"],
       current: true,
     },
     {
       id: "exp2",
-      role: "Hackathon Developer",
+      role: "Hackathon Engineer",
       company: "Smart India Hackathon",
       duration: "Sep 2025",
       description:
-        "Designed and built a healthcare application for migrants in Kerala. Implemented a Python/Django backend with a React & Tailwind CSS frontend to solve language barrier issues in medical access.",
+        "Designed and deployed a healthcare access system for migrant demographics in Kerala. Engineered a hybrid Python/Django backend coupled with a React frontend to overcome linguistic barriers in medical data processing.",
       technologies: ["React", "Python", "Django", "Tailwind CSS"],
     },
     {
       id: "exp3",
-      role: "Web Developer",
-      company: "Personal Projects",
+      role: "Application Developer",
+      company: "Independent Labs",
       duration: "2024 - 2025",
       description:
-        "Built various applications including 'CircuitCart' (e-commerce) and a movie app. Focused on mastering state management, API integration, and responsive UI design.",
+        "Developed multiple experimental applications including 'CircuitCart' (e-commerce engine) and a media aggregation platform. Focused on state management optimization, API protocol integration, and responsive interface standards.",
       technologies: ["JavaScript", "React.js", "Supabase", "CSS"],
     },
   ],
@@ -125,11 +125,11 @@ export const aboutData: AboutData = {
   education: [
     {
       id: "edu1",
-      degree: "Bachelor of Technology in Computer Science",
-      institution: "Noida Institute of Engineering and Technology", // Replace with your actual University name
-      year: "2028 (Expected)",
+      degree: "B.Tech in Computer Science",
+      institution: "Noida Institute of Engineering & Technology",
+      year: "2028 (Target)",
       description:
-        "Focusing on Data Structures & Algorithms, Web Development, and Software Engineering principles.",
+        "Specializing in Advanced Algorithms, Systems Engineering, and Full-Stack Architecture patterns.",
     },
   ],
 };

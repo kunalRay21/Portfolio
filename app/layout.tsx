@@ -4,8 +4,8 @@ import { ResumeModalProvider } from "./contexts/ResumeModalContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Kunal Ray",
-  description: "Frontend systems, built with intent",
+  title: "Ray's Den",
+  description: "",
 };
 
 export default function RootLayout({

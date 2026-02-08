@@ -142,17 +142,13 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         </div>
 
         {/* Parallax Background Title */}
-        {isLocked ? (
-          <BackgroundTitle progress={smoothProgress} />
-        ) : (
-          <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full select-none pointer-events-none overflow-hidden mix-blend-overlay opacity-[0.03]">
-            <div className="whitespace-nowrap translate-x-[20%]">
-              <span className="text-[20vw] font-black uppercase text-white leading-none tracking-tighter">
-                Excellence &bull; Innovation &bull; Design
-              </span>
-            </div>
-          </div>
-        )}
+        {/* Parallax Background Title */}
+        <BackgroundTitle
+          isLocked={isLocked}
+          progress={smoothProgress}
+          currentIndex={currentIndex}
+          totalProjects={projects.length}
+        />
 
         {/* Content Container */}
         <div className="relative z-10 w-full px-12 xl:px-24 flex flex-col h-full justify-center">
@@ -179,7 +175,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
           </div>
 
           {/* Horizontal Scroll Track */}
-          <div className="w-full pl-[5vw]">
+          <div className="w-full pl-[5vw] mt-24">
             <motion.div
               style={{ x: isLocked ? scrollX : `${manualXPosition}%` }}
               animate={!isLocked ? { x: `${manualXPosition}%` } : {}}
@@ -273,12 +269,32 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   );
 }
 
-function BackgroundTitle({ progress }: { progress: MotionValue<number> }) {
-  const x = useTransform(progress, [0, 1], ["0%", "20%"]);
+interface BackgroundTitleProps {
+  isLocked: boolean;
+  progress: MotionValue<number>;
+  currentIndex: number;
+  totalProjects: number;
+}
+
+function BackgroundTitle({
+  isLocked,
+  progress,
+  currentIndex,
+  totalProjects,
+}: BackgroundTitleProps) {
+  const scrollX = useTransform(progress, [0, 1], ["0%", "20%"]);
+  // Calculate percentage based on current index vs total slides
+  // We use totalProjects (which corresponds to the last "See More" slide index)
+  const manualX = `${(currentIndex / totalProjects) * 20}%`;
 
   return (
     <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full select-none pointer-events-none overflow-hidden mix-blend-overlay opacity-[0.03]">
-      <motion.div style={{ x }} className="whitespace-nowrap">
+      <motion.div
+        style={isLocked ? { x: scrollX } : {}}
+        animate={!isLocked ? { x: manualX } : {}}
+        transition={{ duration: 0.8, ease: "circOut" }}
+        className="whitespace-nowrap"
+      >
         <span className="text-[20vw] font-black uppercase text-white leading-none tracking-tighter">
           Excellence &bull; Innovation &bull; Design
         </span>
@@ -298,12 +314,13 @@ function ParallaxProjectCard({
     <div className="group relative shrink-0 w-[60vw] max-w-[950px]">
       <div className="flex flex-col gap-6">
         {/* Number & Line */}
+        {/* Number & Line */}
         <div className="flex items-center gap-4 opacity-70 group-hover:opacity-100 transition-opacity duration-500">
-          <span className="font-mono text-emerald-400 text-base">
+          <span className="font-mono text-emerald-400 text-2xl font-bold">
             0{index + 1}
           </span>
-          <div className="h-[1px] w-16 bg-emerald-500/50" />
-          <span className="font-mono text-emerald-300/80 text-xs uppercase tracking-widest">
+          <div className="h-[2px] w-16 bg-emerald-500" />
+          <span className="font-mono text-emerald-300 text-sm font-bold uppercase tracking-widest">
             {project.category || "Development"}
           </span>
         </div>
@@ -327,7 +344,7 @@ function ParallaxProjectCard({
           <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 md:p-14">
             <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
               {/* Increased text contrast */}
-              <h3 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight drop-shadow-lg">
+              <h3 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight drop-shadow-xl">
                 {project.title}
               </h3>
               <p className="text-neutral-200 max-w-xl text-sm md:text-lg leading-relaxed line-clamp-3 mb-8 drop-shadow-md">
